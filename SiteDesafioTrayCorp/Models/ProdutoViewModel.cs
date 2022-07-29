@@ -12,5 +12,8 @@ namespace SiteDesafioTrayCorp.Models
         public int estoque { get; set; }
         [JsonProperty("value")]
         public float value { get; set; }
+
+        [JsonIgnore]
+        public string Valor { get; set; }
     }
 }

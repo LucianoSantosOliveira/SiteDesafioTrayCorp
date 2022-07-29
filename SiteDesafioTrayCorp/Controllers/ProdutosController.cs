@@ -15,18 +15,19 @@ namespace SiteDesafioTrayCorp.Controllers
         private readonly HttpClient Request;
         private ProdutoViewModel produtoViewModel;
         private List<ProdutoViewModel> produtoViewModels;
-
+        
 
         public ProdutosController()
         {
             Request = new HttpClient();
+            Request.BaseAddress = new Uri("https://localhost:7298/");
             produtoViewModel = new ProdutoViewModel();
             produtoViewModels = new List<ProdutoViewModel>();
         }
 
         private async Task GetAllProdutos()
         {
-            var ProdutoJson = await Request.GetStringAsync("https://localhost:7298/api/Produtos");
+            var ProdutoJson = await Request.GetStringAsync("api/Produtos");
             
              produtoViewModels = JsonConvert.DeserializeObject<List<ProdutoViewModel>>(ProdutoJson);
              return;
@@ -34,7 +35,7 @@ namespace SiteDesafioTrayCorp.Controllers
 
         private async Task GetProdutosById(Guid produtoId)
         {
-            var ProdutoJson = await Request.GetStringAsync("https://localhost:7298/api/Produtos/" + produtoId.ToString());
+            var ProdutoJson = await Request.GetStringAsync("api/Produtos/" + produtoId.ToString());
 
             produtoViewModel = JsonConvert.DeserializeObject<ProdutoViewModel>(ProdutoJson);
             return;
@@ -81,7 +82,7 @@ namespace SiteDesafioTrayCorp.Controllers
                 if (collection.estoque < 0)
                     ModelState.AddModelError("estoque", "Estoque não pode ser número negativo");
 
-                await Request.PostAsync("https://localhost:7298/api/Produtos/", requestContent);
+                await Request.PostAsync("api/Produtos/", requestContent);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -105,7 +106,7 @@ namespace SiteDesafioTrayCorp.Controllers
         {
             try
             {
-                var url = "https://localhost:7298/api/Produtos/";
+                var url = "api/Produtos/";
                 var ProdutoJson = JsonConvert.SerializeObject(collection);
                 var requestContent = new StringContent(ProdutoJson, Encoding.UTF8, "application/json");
 
@@ -142,7 +143,7 @@ namespace SiteDesafioTrayCorp.Controllers
         {
             try
             {
-                await Request.DeleteAsync("https://localhost:7298/api/Produtos/" + collection.id);
+                await Request.DeleteAsync("api/Produtos/" + collection.id);
                 return RedirectToAction(nameof(Index));
             }
             catch

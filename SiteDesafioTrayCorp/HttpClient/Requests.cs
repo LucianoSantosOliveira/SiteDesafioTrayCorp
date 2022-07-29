@@ -10,7 +10,7 @@ namespace SiteDesafioTrayCorp.Requests
         {
             HttpClient httpClient = new HttpClient();
 
-            var response = await httpClient.GetAsync("https://localhost:7298/api/Produtos");
+            var response = await httpClient.GetAsync("api/Produtos");
 
             return;
         }
