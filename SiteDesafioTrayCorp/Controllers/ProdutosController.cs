@@ -6,6 +6,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Text;
 using System.Net.Http.Headers;
+using System.Globalization;
 
 namespace SiteDesafioTrayCorp.Controllers
 {
@@ -69,6 +70,17 @@ namespace SiteDesafioTrayCorp.Controllers
             return View(produtoViewModel);
         }
 
+        private float ConvertValorToFloat(string valor)
+        {
+
+            CultureInfo formato = null;
+            formato = (CultureInfo)CultureInfo.InvariantCulture.Clone();
+            formato.NumberFormat.NumberDecimalSeparator = ".";
+            formato.NumberFormat.NumberGroupSeparator = ",";
+            return float.Parse(valor.Replace("R$", ""),formato);
+                    
+        }
+
         // POST: ProdutoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -76,12 +88,15 @@ namespace SiteDesafioTrayCorp.Controllers
         {
             try
             {
+                if (collection.estoque < 0)
+                {
+                    ModelState.AddModelError("estoque", "Estoque não pode ser número negativo");
+                    return View();
+                }
+
+                collection.value = ConvertValorToFloat(collection.Valor);
                 var ProdutoJson = JsonConvert.SerializeObject(collection);
                 var requestContent = new StringContent(ProdutoJson, Encoding.UTF8, "application/json");
-
-                if (collection.estoque < 0)
-                    ModelState.AddModelError("estoque", "Estoque não pode ser número negativo");
-
                 await Request.PostAsync("api/Produtos/", requestContent);
 
                 return RedirectToAction(nameof(Index));
@@ -96,6 +111,7 @@ namespace SiteDesafioTrayCorp.Controllers
         public async Task<ActionResult> Edit(Guid produtoId)
         {
             await GetProdutosById(produtoId);
+            produtoViewModel.Valor = produtoViewModel.value.ToString();
             return View(produtoViewModel);
         }
 
@@ -106,18 +122,16 @@ namespace SiteDesafioTrayCorp.Controllers
         {
             try
             {
-                var url = "api/Produtos/";
-                var ProdutoJson = JsonConvert.SerializeObject(collection);
-                var requestContent = new StringContent(ProdutoJson, Encoding.UTF8, "application/json");
-
                 if (collection.estoque < 0)
                 {
                     ModelState.AddModelError("estoque", "Estoque não pode ser número negativo");
-
                     return View();
                 }
-                    
 
+                var url = "api/Produtos/";
+                collection.value = ConvertValorToFloat(collection.Valor);
+                var ProdutoJson = JsonConvert.SerializeObject(collection);                
+                var requestContent = new StringContent(ProdutoJson, Encoding.UTF8, "application/json");
                 await Request.PutAsync(url + collection.id, requestContent);
                 
                 return RedirectToAction(nameof(Index));

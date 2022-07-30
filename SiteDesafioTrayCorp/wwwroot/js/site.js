@@ -37,8 +37,8 @@ $(document).ready(function () {
         $("#Valor").maskMoney({
             prefix: 'R$ ',
             allowNegative: true,
-            thousands: '.',
-            decimal: ','
+            thousands: ',',
+            decimal: '.'
         });
     });
 
