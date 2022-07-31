@@ -90,7 +90,15 @@ namespace SiteDesafioTrayCorp.Controllers
             {
                 if (collection.estoque < 0)
                 {
-                    ModelState.AddModelError("estoque", "Estoque não pode ser número negativo");
+                    ModelState.AddModelError("estoque", "Estoque não pode ser número negativo");                                     
+                }
+                if (String.IsNullOrEmpty(collection.nome))
+                {
+                    ModelState.AddModelError("nome", "nome não pode ser nulo");
+                }
+
+                if(!ModelState.IsValid)
+                {
                     return View();
                 }
 
@@ -125,6 +133,14 @@ namespace SiteDesafioTrayCorp.Controllers
                 if (collection.estoque < 0)
                 {
                     ModelState.AddModelError("estoque", "Estoque não pode ser número negativo");
+                }
+                if (String.IsNullOrEmpty(collection.nome))
+                {
+                    ModelState.AddModelError("nome", "nome não pode ser nulo");
+                }
+
+                if (!ModelState.IsValid)
+                {
                     return View();
                 }
 
