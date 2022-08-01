@@ -45,15 +45,25 @@ namespace SiteDesafioTrayCorp.Controllers
         // GET: ProdutoController
         public async Task<ActionResult> IndexAsync()
         {
-            await GetAllProdutos();
 
-            if (!produtoViewModels.Any())
-                return View(new ProdutoViewModel()
-                {
-                    nome = "Não há produtos cadastrados"
-                });
+            try
+            {
+                await GetAllProdutos();
+
+                if (!produtoViewModels.Any())
+                    return View(new ProdutoViewModel()
+                    {
+                        nome = "Não há produtos cadastrados"
+                    });
+
+                return View(produtoViewModels);
+            }
+
+            catch (Exception ex)
+            {
+                return View();
+            }
             
-            return View(produtoViewModels);
         }
 
         // GET: ProdutoController/Details/5
