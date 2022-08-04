@@ -36,7 +36,7 @@ $(document).ready(function () {
     $(function () {
         $("#Valor").maskMoney({
             prefix: 'R$ ',
-            allowNegative: true,
+            allowNegative: false,
             thousands: ',',
             decimal: '.'
         });
