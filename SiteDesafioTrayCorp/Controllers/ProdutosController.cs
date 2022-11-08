@@ -51,10 +51,7 @@ namespace SiteDesafioTrayCorp.Controllers
                 await GetAllProdutos();
 
                 if (!produtoViewModels.Any())
-                    return View(new ProdutoViewModel()
-                    {
-                        nome = "Não há produtos cadastrados"
-                    });
+                    return View(new List<ProdutoViewModel>() { });
 
                 return View(produtoViewModels);
             }
